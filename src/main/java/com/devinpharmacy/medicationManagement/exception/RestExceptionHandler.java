@@ -19,13 +19,13 @@ import java.util.Map;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RegistroNaoEncontradoException.class)
     public ResponseEntity<Object> handleRegistroNaoEncontradoException(RegistroNaoEncontradoException ex) {
-        ErroResponse error = new ErroResponse("Registro Não Encontrado", ex.getMessage());
+        ErroResponse error = new ErroResponse("Registro não encontrado", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(RegistroJaExistenteException.class)
     public ResponseEntity<Object> handleRegistroJaExistenteException(RegistroJaExistenteException ex) {
-        ErroResponse error = new ErroResponse("Registro Existente", ex.getMessage());
+        ErroResponse error = new ErroResponse("Falha na operação. Registro existente", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
