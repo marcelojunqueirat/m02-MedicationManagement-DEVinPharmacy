@@ -1,6 +1,7 @@
 package com.devinpharmacy.medicationManagement.service;
 
 import com.devinpharmacy.medicationManagement.exception.RegistroJaExistenteException;
+import com.devinpharmacy.medicationManagement.exception.RegistroNaoEncontradoException;
 import com.devinpharmacy.medicationManagement.model.Farmacia;
 import com.devinpharmacy.medicationManagement.repository.FarmaciaRepository;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,12 @@ public class FarmaciaService {
     @Transactional
     public List<Farmacia> consultar() {
         return farmaciaRepo.findAll();
+    }
+
+    @Transactional
+    public Farmacia consultar(Long cnpj) {
+        return farmaciaRepo.findById(cnpj)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Farmácia", cnpj));
     }
 
     @Transactional
