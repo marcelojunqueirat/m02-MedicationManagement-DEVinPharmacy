@@ -21,6 +21,11 @@ public class EstoqueService {
     }
 
     @Transactional
+    public List<Estoque> consultar(Long cnpj) {
+        return estoqueRepo.findByCnpj(cnpj);
+    }
+
+    @Transactional
     public Estoque salvar(Estoque estoque) {
         boolean existe = estoqueRepo.existsById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
         if (existe) {
