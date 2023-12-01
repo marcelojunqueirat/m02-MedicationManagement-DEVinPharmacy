@@ -1,16 +1,17 @@
 package com.devinpharmacy.medicationManagement.controller;
 
+import com.devinpharmacy.medicationManagement.dto.EstoqueAtualizadoResponse;
+import com.devinpharmacy.medicationManagement.dto.EstoqueRequest;
 import com.devinpharmacy.medicationManagement.dto.EstoqueResponse;
 import com.devinpharmacy.medicationManagement.model.Estoque;
 import com.devinpharmacy.medicationManagement.service.EstoqueService;
 import com.devinpharmacy.medicationManagement.service.MedicamentoService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,14 @@ public class EstoqueController {
             estoqueDTO.setNome(produto.getNome());
             resp.add(estoqueDTO);
         }
+        return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping
+    public ResponseEntity<EstoqueAtualizadoResponse> entrada(@RequestBody @Valid EstoqueRequest request){
+        var estoque = modelMapper.map(request, Estoque.class);
+        estoque = estoqueService.salvarEntrada(estoque);
+        var resp = modelMapper.map(estoque, EstoqueAtualizadoResponse.class);
         return ResponseEntity.ok(resp);
     }
 }
