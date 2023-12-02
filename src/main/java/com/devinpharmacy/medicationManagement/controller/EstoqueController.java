@@ -54,4 +54,14 @@ public class EstoqueController {
         var resp = modelMapper.map(estoque, EstoqueAtualizadoResponse.class);
         return ResponseEntity.ok(resp);
     }
+
+    @DeleteMapping
+    public ResponseEntity<EstoqueAtualizadoResponse> saida(@RequestBody @Valid EstoqueRequest request){
+        var estoque = modelMapper.map(request, Estoque.class);
+        farmaciaService.consultar(estoque.getCnpj());
+        medicamentoService.consultar(estoque.getNroRegistro());
+        estoque = estoqueService.salvarSaida(estoque);
+        var resp = modelMapper.map(estoque, EstoqueAtualizadoResponse.class);
+        return ResponseEntity.ok(resp);
+    }
 }
