@@ -19,13 +19,19 @@ import java.util.Map;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RegistroNaoEncontradoException.class)
     public ResponseEntity<Object> handleRegistroNaoEncontradoException(RegistroNaoEncontradoException ex) {
-        ErroResponse error = new ErroResponse("Registro não encontrado", ex.getMessage());
+        ErroResponse error = new ErroResponse("Registro não encontrado.", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(RegistroJaExistenteException.class)
     public ResponseEntity<Object> handleRegistroJaExistenteException(RegistroJaExistenteException ex) {
-        ErroResponse error = new ErroResponse("Falha na operação. Registro existente", ex.getMessage());
+        ErroResponse error = new ErroResponse("Falha na operação. Registro existente.", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(EstoqueNegativoException.class)
+    public ResponseEntity<Object> handleEstoqueNegativoException(EstoqueNegativoException ex) {
+        ErroResponse error = new ErroResponse("Falha na operação. Quantidade de venda maior que quantidade em estoque.", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -37,7 +43,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             fieldErrors.put(fieldName, errorMessage);
         });
-        ErroResponse error = new ErroResponse("Erro de Validacao", "Campos inválidos",
+        ErroResponse error = new ErroResponse("Erro de Validação", "Campos inválidos",
                 fieldErrors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
