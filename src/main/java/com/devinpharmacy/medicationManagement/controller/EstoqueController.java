@@ -5,6 +5,7 @@ import com.devinpharmacy.medicationManagement.dto.EstoqueRequest;
 import com.devinpharmacy.medicationManagement.dto.EstoqueResponse;
 import com.devinpharmacy.medicationManagement.model.Estoque;
 import com.devinpharmacy.medicationManagement.service.EstoqueService;
+import com.devinpharmacy.medicationManagement.service.FarmaciaService;
 import com.devinpharmacy.medicationManagement.service.MedicamentoService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,9 @@ public class EstoqueController {
     @Autowired
     private MedicamentoService medicamentoService;
 
+    @Autowired
+    private FarmaciaService farmaciaService;
+
     @GetMapping("/{cnpj}")
     public ResponseEntity<List<EstoqueResponse>> consultar(@PathVariable("cnpj") Long cnpj){
         var estoques = estoqueService.consultar(cnpj);
@@ -44,6 +48,8 @@ public class EstoqueController {
     @PostMapping
     public ResponseEntity<EstoqueAtualizadoResponse> entrada(@RequestBody @Valid EstoqueRequest request){
         var estoque = modelMapper.map(request, Estoque.class);
+        farmaciaService.consultar(estoque.getCnpj());
+        medicamentoService.consultar(estoque.getNroRegistro());
         estoque = estoqueService.salvarEntrada(estoque);
         var resp = modelMapper.map(estoque, EstoqueAtualizadoResponse.class);
         return ResponseEntity.ok(resp);

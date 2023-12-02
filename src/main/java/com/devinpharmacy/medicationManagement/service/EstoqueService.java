@@ -1,7 +1,5 @@
 package com.devinpharmacy.medicationManagement.service;
 
-import com.devinpharmacy.medicationManagement.exception.RegistroJaExistenteException;
-import com.devinpharmacy.medicationManagement.exception.RegistroNaoEncontradoException;
 import com.devinpharmacy.medicationManagement.model.Estoque;
 import com.devinpharmacy.medicationManagement.model.IdEstoque;
 import com.devinpharmacy.medicationManagement.repository.EstoqueRepository;
@@ -17,9 +15,6 @@ import java.util.Optional;
 public class EstoqueService {
     @Autowired
     private EstoqueRepository estoqueRepo;
-
-    @Autowired
-    private FarmaciaService farmaciaService;
 
     @Autowired
     private MedicamentoService medicamentoService;
@@ -43,8 +38,6 @@ public class EstoqueService {
 
     @Transactional
     public Estoque salvarEntrada(Estoque estoque) {
-        farmaciaService.consultar(estoque.getCnpj());
-        medicamentoService.consultar(estoque.getNroRegistro());
         estoque.setDataAtualizacao(LocalDateTime.now());
 
         Optional<Estoque> estoqueAtual = estoqueRepo.findById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
