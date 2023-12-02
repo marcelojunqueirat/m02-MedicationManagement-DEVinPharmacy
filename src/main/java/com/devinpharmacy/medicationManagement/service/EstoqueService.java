@@ -16,9 +16,6 @@ public class EstoqueService {
     @Autowired
     private EstoqueRepository estoqueRepo;
 
-    @Autowired
-    private MedicamentoService medicamentoService;
-
     @Transactional
     public List<Estoque> consultar() {
         return estoqueRepo.findAll();
