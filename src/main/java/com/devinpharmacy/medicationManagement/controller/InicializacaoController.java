@@ -51,7 +51,7 @@ public class InicializacaoController {
             medicamentoService.salvar(medicamento6);
         }
         var estoques = estoqueService.consultar();
-        if(estoques.isEmpty()){
+        if (estoques.isEmpty()) {
             Estoque estoque1 = new Estoque(90561736000121L, 1010, 12, LocalDateTime.now());
             Estoque estoque2 = new Estoque(90561736000121L, 7473, 10, LocalDateTime.now());
             Estoque estoque3 = new Estoque(43178995000198L, 7473, 2, LocalDateTime.now());
