@@ -83,7 +83,7 @@ public class EstoqueService {
         Estoque estoqueOrigem = consultar(estoqueTransferencia.getCnpjOrigem(), estoqueTransferencia.getNroRegistro());
         Estoque estoqueDestino = consultar(estoqueTransferencia.getCnpjDestino(), estoqueTransferencia.getNroRegistro());
 
-        if(estoqueOrigem.getQuantidade() < estoqueTransferencia.getQuantidade()){
+        if (estoqueOrigem.getQuantidade() < estoqueTransferencia.getQuantidade()) {
             throw new EstoqueNegativoException(estoqueTransferencia.getQuantidade(), estoqueOrigem.getQuantidade());
         }
 
@@ -97,7 +97,7 @@ public class EstoqueService {
         estoqueOrigem = estoqueRepo.save(estoqueOrigem);
         estoqueDestino = estoqueRepo.save(estoqueDestino);
 
-        if (estoqueOrigem.getQuantidade() == 0){
+        if (estoqueOrigem.getQuantidade() == 0) {
             estoqueRepo.delete(estoqueOrigem);
         }
 

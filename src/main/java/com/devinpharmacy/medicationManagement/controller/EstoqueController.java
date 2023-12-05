@@ -31,7 +31,7 @@ public class EstoqueController {
     private FarmaciaService farmaciaService;
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity<List<EstoqueResponse>> consultar(@PathVariable("cnpj") Long cnpj){
+    public ResponseEntity<List<EstoqueResponse>> consultar(@PathVariable("cnpj") Long cnpj) {
         var estoques = estoqueService.consultar(cnpj);
         var resp = new ArrayList<EstoqueResponse>();
         for (Estoque estoque : estoques) {
@@ -44,7 +44,7 @@ public class EstoqueController {
     }
 
     @PostMapping
-    public ResponseEntity<EstoqueAtualizadoResponse> entrada(@RequestBody @Valid EstoqueRequest request){
+    public ResponseEntity<EstoqueAtualizadoResponse> entrada(@RequestBody @Valid EstoqueRequest request) {
         var estoque = modelMapper.map(request, Estoque.class);
         farmaciaService.consultar(estoque.getCnpj());
         medicamentoService.consultar(estoque.getNroRegistro());
@@ -54,7 +54,7 @@ public class EstoqueController {
     }
 
     @DeleteMapping
-    public ResponseEntity<EstoqueAtualizadoResponse> saida(@RequestBody @Valid EstoqueRequest request){
+    public ResponseEntity<EstoqueAtualizadoResponse> saida(@RequestBody @Valid EstoqueRequest request) {
         var estoque = modelMapper.map(request, Estoque.class);
         farmaciaService.consultar(estoque.getCnpj());
         medicamentoService.consultar(estoque.getNroRegistro());
@@ -64,7 +64,7 @@ public class EstoqueController {
     }
 
     @PutMapping
-    public ResponseEntity<EstoqueTransferenciaResponse> transferencia(@RequestBody @Valid EstoqueTransferenciaRequest request){
+    public ResponseEntity<EstoqueTransferenciaResponse> transferencia(@RequestBody @Valid EstoqueTransferenciaRequest request) {
         farmaciaService.consultar(request.getCnpjOrigem());
         farmaciaService.consultar(request.getCnpjDestino());
         medicamentoService.consultar(request.getNroRegistro());
