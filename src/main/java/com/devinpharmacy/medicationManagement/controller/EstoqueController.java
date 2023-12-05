@@ -1,8 +1,6 @@
 package com.devinpharmacy.medicationManagement.controller;
 
-import com.devinpharmacy.medicationManagement.dto.EstoqueAtualizadoResponse;
-import com.devinpharmacy.medicationManagement.dto.EstoqueRequest;
-import com.devinpharmacy.medicationManagement.dto.EstoqueResponse;
+import com.devinpharmacy.medicationManagement.dto.*;
 import com.devinpharmacy.medicationManagement.model.Estoque;
 import com.devinpharmacy.medicationManagement.service.EstoqueService;
 import com.devinpharmacy.medicationManagement.service.FarmaciaService;
@@ -62,6 +60,15 @@ public class EstoqueController {
         medicamentoService.consultar(estoque.getNroRegistro());
         estoque = estoqueService.salvarSaida(estoque);
         var resp = modelMapper.map(estoque, EstoqueAtualizadoResponse.class);
+        return ResponseEntity.ok(resp);
+    }
+
+    @PutMapping
+    public ResponseEntity<EstoqueTransferenciaResponse> transferencia(@RequestBody @Valid EstoqueTransferenciaRequest request){
+        farmaciaService.consultar(request.getCnpjOrigem());
+        farmaciaService.consultar(request.getCnpjDestino());
+        medicamentoService.consultar(request.getNroRegistro());
+        var resp = estoqueService.transferencia(request);
         return ResponseEntity.ok(resp);
     }
 }

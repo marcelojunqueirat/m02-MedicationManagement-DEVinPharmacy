@@ -1,5 +1,7 @@
 package com.devinpharmacy.medicationManagement.service;
 
+import com.devinpharmacy.medicationManagement.dto.EstoqueTransferenciaRequest;
+import com.devinpharmacy.medicationManagement.dto.EstoqueTransferenciaResponse;
 import com.devinpharmacy.medicationManagement.exception.EstoqueNegativoException;
 import com.devinpharmacy.medicationManagement.exception.RegistroNaoEncontradoException;
 import com.devinpharmacy.medicationManagement.model.Estoque;
@@ -29,6 +31,12 @@ public class EstoqueService {
     }
 
     @Transactional
+    public Estoque consultar(Long cnpj, Integer nroRegistro) {
+        return estoqueRepo.findById(new IdEstoque(cnpj, nroRegistro))
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Estoque", String.format("CNPJ: %s, Número do Registro: %s", cnpj, nroRegistro)));
+    }
+
+    @Transactional
     public Estoque salvar(Estoque estoque) {
         boolean existe = estoqueRepo.existsById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
         estoque = estoqueRepo.save(estoque);
@@ -40,7 +48,7 @@ public class EstoqueService {
         estoque.setDataAtualizacao(LocalDateTime.now());
 
         Optional<Estoque> estoqueAtual = estoqueRepo.findById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
-        if (estoqueAtual.isEmpty()){
+        if (estoqueAtual.isEmpty()) {
             return estoqueRepo.save(estoque);
         }
 
@@ -52,15 +60,10 @@ public class EstoqueService {
 
     @Transactional
     public Estoque salvarSaida(Estoque estoque) {
-        Optional<Estoque> estoqueAtual = estoqueRepo.findById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
+        Estoque estoqueAtual = consultar(estoque.getCnpj(), estoque.getNroRegistro());
+        Integer quantidadeAtual = estoqueAtual.getQuantidade();
 
-        if(estoqueAtual.isEmpty()){
-            throw new RegistroNaoEncontradoException("Estoque", String.format("CNPJ: %s, Número do Registro: %s", estoque.getCnpj(), estoque.getNroRegistro()));
-        }
-
-        Integer quantidadeAtual = estoqueAtual.get().getQuantidade();
-
-        if(quantidadeAtual < estoque.getQuantidade()){
+        if (quantidadeAtual < estoque.getQuantidade()) {
             throw new EstoqueNegativoException(estoque.getQuantidade(), quantidadeAtual);
         }
 
@@ -68,11 +71,43 @@ public class EstoqueService {
         estoque.setQuantidade(quantidadeAtual - estoque.getQuantidade());
         estoque = estoqueRepo.save(estoque);
 
-        if(estoque.getQuantidade() == 0){
+        if (estoque.getQuantidade() == 0) {
             estoqueRepo.delete(estoque);
         }
 
         return estoque;
     }
 
+    @Transactional
+    public EstoqueTransferenciaResponse transferencia(EstoqueTransferenciaRequest estoqueTransferencia) {
+        Estoque estoqueOrigem = consultar(estoqueTransferencia.getCnpjOrigem(), estoqueTransferencia.getNroRegistro());
+        Estoque estoqueDestino = consultar(estoqueTransferencia.getCnpjDestino(), estoqueTransferencia.getNroRegistro());
+
+        if(estoqueOrigem.getQuantidade() < estoqueTransferencia.getQuantidade()){
+            throw new EstoqueNegativoException(estoqueTransferencia.getQuantidade(), estoqueOrigem.getQuantidade());
+        }
+
+        Integer quantidadeAposSaidaOrigem = estoqueOrigem.getQuantidade() - estoqueTransferencia.getQuantidade();
+        estoqueOrigem.setQuantidade(quantidadeAposSaidaOrigem);
+        estoqueOrigem.setDataAtualizacao(LocalDateTime.now());
+
+        estoqueDestino.setQuantidade(estoqueDestino.getQuantidade() + estoqueTransferencia.getQuantidade());
+        estoqueDestino.setDataAtualizacao(LocalDateTime.now());
+
+        estoqueOrigem = estoqueRepo.save(estoqueOrigem);
+        estoqueDestino = estoqueRepo.save(estoqueDestino);
+
+        if (estoqueOrigem.getQuantidade() == 0){
+            estoqueRepo.delete(estoqueOrigem);
+        }
+
+        var estoqueTransferenciaResponse = new EstoqueTransferenciaResponse();
+        estoqueTransferenciaResponse.setNroRegistro(estoqueOrigem.getNroRegistro());
+        estoqueTransferenciaResponse.setCnpjOrigem(estoqueOrigem.getCnpj());
+        estoqueTransferenciaResponse.setQuantidadeOrigem(estoqueOrigem.getQuantidade());
+        estoqueTransferenciaResponse.setCnpjDestino(estoqueDestino.getCnpj());
+        estoqueTransferenciaResponse.setQuantidadeDestino(estoqueDestino.getQuantidade());
+
+        return estoqueTransferenciaResponse;
+    }
 }

@@ -31,7 +31,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EstoqueNegativoException.class)
     public ResponseEntity<Object> handleEstoqueNegativoException(EstoqueNegativoException ex) {
-        ErroResponse error = new ErroResponse("Falha na operação. Quantidade de venda maior que quantidade em estoque.", ex.getMessage());
+        ErroResponse error = new ErroResponse("Falha na operação. Quantidade de venda / transferência maior que quantidade em estoque.", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
