@@ -1,6 +1,5 @@
 package com.devinpharmacy.medicationManagement.dto;
 
-import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

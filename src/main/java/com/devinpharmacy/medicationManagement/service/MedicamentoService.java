@@ -27,9 +27,9 @@ public class MedicamentoService {
     }
 
     @Transactional
-    public Medicamento salvar(Medicamento medicamento){
+    public Medicamento salvar(Medicamento medicamento) {
         boolean existe = medicamentoRepo.existsById(medicamento.getNroRegistro());
-        if(existe){
+        if (existe) {
             throw new RegistroJaExistenteException("Medicamento", medicamento.getNroRegistro());
         }
         medicamento = medicamentoRepo.save(medicamento);

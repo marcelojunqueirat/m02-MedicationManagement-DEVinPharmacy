@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EstoqueNegativoException extends RuntimeException {
-    private Integer quantidadeVenda;
+    private Integer quantidadeVendaTransferencia;
     private Integer quantidadeEstoque;
 
     public String getMessage() {
-        if (quantidadeVenda == null || quantidadeEstoque == null)
+        if (quantidadeVendaTransferencia == null || quantidadeEstoque == null)
             return null;
-        return String.format("Quantidade informada para venda: '%d'. Quantidade em estoque: '%d'.", quantidadeVenda, quantidadeEstoque);
+        return String.format("Quantidade informada: '%d'. Quantidade em estoque: '%d'.", quantidadeVendaTransferencia, quantidadeEstoque);
     }
 }
