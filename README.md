@@ -10,12 +10,12 @@
 
 ### Pré-requisito para rodar o projeto é ter instalado o **<a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">Java 17</a>** e <a href="https://maven.apache.org/download.cgi" target="_blank">Maven 3.9</a>
 ### Após o clone do projeto, abra o terminal na raiz da pasta e digite:
-```shell
+``` shell
 ./mvnw clean package
 ```
 >O comando acima irá limpar o projeto recriando o diretório "target", compilará o fonte, executará testes e empacotará o código compilado em um formato distribuível (.jar)
 
-```shell
+``` shell
 ./mvnw spring-boot:run
 ```
 >O comando acima irá executar a aplicação por padrão na porta 8080 (localhost:8080)
