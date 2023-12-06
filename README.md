@@ -1,6 +1,6 @@
 # Medication Management - DEVinPharmacy LTDA
 
-### Medication Management é uma API REST voltada para a gestão de farmácias, medicamentos e estoques. Permite o controle de entradas e saídas do estoque, cadastro de farmácias e medicamentos, assim como a listagem dos mesmos.
+### Medication Management é uma API REST construída no padrão MVC, voltada para a gestão de farmácias, medicamentos e estoques. Permite o controle de entradas e saídas do estoque, cadastro de farmácias e medicamentos, assim como a listagem dos mesmos.
 
 ## Tecnologias
 
