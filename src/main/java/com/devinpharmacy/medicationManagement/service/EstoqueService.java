@@ -37,10 +37,8 @@ public class EstoqueService {
     }
 
     @Transactional
-    public Estoque salvar(Estoque estoque) {
-        boolean existe = estoqueRepo.existsById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
-        estoque = estoqueRepo.save(estoque);
-        return estoque;
+    public void salvar(Estoque estoque) {
+        estoqueRepo.save(estoque);
     }
 
     @Transactional
